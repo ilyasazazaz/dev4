@@ -1,0 +1,10 @@
+name: Code
+
+on: pull_request
+
+jobs:
+  code:
+    runs-on: ubuntu-latest
+    steps:
+    - name: coda
+      run: echo "HAHA"
