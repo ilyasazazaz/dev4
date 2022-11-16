@@ -16,8 +16,82 @@ namespace CardCodedDate
         static void Main(string[] args)
         {
             Inic();
+            Console.WriteLine(DateCoder(12,3));
+            Console.WriteLine(DateCoder(4,2));
+            Console.WriteLine(DateCoder(5,3));
+            Console.WriteLine(DateCoder(4312,4231));
         }
 
+        static string DateCoder(int month, int day)
+
+        {
+            string answer = "Это: ";
+
+            if (month < 1 || month > 12)
+            {
+                Console.WriteLine("Недопустимое значение");
+                return "-1";
+            }
+            if (day < 1 || day > MaxDayInMounth[month - 1])
+            {
+                Console.WriteLine("Недопустимое значение");
+                return "-1";
+            }
+            
+            int AnswZ = 0;
+            int AnswM = 0;
+            int AnswC = 0;
+
+            for (int q = 0; q < 13; q++)
+            {
+                if (zodiac[q, 0] == month)
+                {
+                    if (zodiac[q, 1] <= day)
+                    {
+                        AnswZ = q;
+                        q = 13;
+                    }
+                    else
+                    {
+                        AnswZ = q - 1;
+                        q = 13;
+                    }
+                }
+            }
+            if (AnswZ == -1) { AnswZ = 11; }
+
+            answer+=ZStr[AnswZ];
+
+            int numOfDay = 0;
+            if (day >= zodiac[AnswZ, 1] && month == zodiac[AnswZ, 0])
+            {
+                numOfDay = day - zodiac[AnswZ, 1] + 1;
+            }
+            else
+            {
+                if (month == 1)
+                {
+                    numOfDay = MaxDayInMounth[11] - zodiac[AnswZ, 1] + day + 1;
+
+                }
+                else
+                {
+                    numOfDay = MaxDayInMounth[month - 2] - zodiac[AnswZ, 1] + day + 1;
+                }
+            }
+
+            AnswM = numOfDay / ((ZHowLong[AnswZ] / 4) + 1);
+            AnswC = numOfDay % ((ZHowLong[AnswZ] / 4) + 1);
+            if (AnswC == 0)
+            {
+                AnswM--;
+                AnswC = ((numOfDay - 1) % ((ZHowLong[AnswZ] / 4) + 1)) + 1;
+            }
+            answer+=" " + MChar[AnswM];
+            answer += " " + CChar[AnswC - 1];
+
+            return answer;
+        }
         static void Inic()
         {
             for (int q = 0; q < 13; q++)
