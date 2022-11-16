@@ -18,7 +18,7 @@ namespace CardCodedDate
 
         static string mod = "change";
 
-        static string ModChanger()
+        static void ChangeMod()
         {
             Console.Write(
                 "----------------------------------\n" +
@@ -26,55 +26,65 @@ namespace CardCodedDate
                 "№ | Обозначение\n" +
                 "1 | Кодирование даты\n" +
                 "2 | Расшифровка кода\n" +
-                "3 | Выйти\n\n"+
+                "3 | Выйти\n\n" +
                 "Ввод: "
                 );
             string a = Console.ReadLine();
-            Console.WriteLine("----------------------------------\n");
-            return a;
+            Console.WriteLine("----------------------------------");
 
+            switch (a)
+            {
+                case "1":
+                    mod = "code";
+                    break;
+                case "2":
+                    mod = "decode";
+                    break;
+                case "3":
+                    mod = "exit";
+                    break;
+                default:
+                    Console.WriteLine("Команда не распознана");
+                    break;
+            }
+        }
+
+        static void CodeMod()
+        {
+            int month = 0;
+            int day = 0;
+            try
+            {
+                Console.Write("Номер месяца: ");
+                month = Convert.ToInt32(Console.ReadLine());
+                Console.Write("Номер дня: ");
+                day = Convert.ToInt32(Console.ReadLine());
+                DateCoder(month, day);
+            }
+            catch
+            {
+                Console.WriteLine("Недопустимое значение");
+            }
         }
 
         static void Main(string[] args)
         {
             Inic();
-            while (true)
+            while (mod!= "exit")
             {
-                string a = ModChanger();
-
-                switch (a)
+                switch (mod)
                 {
-                    case "1":
-                        if (true) {
-                            Console.WriteLine();
-
-                            int month = 0;
-                            int day = 0;
-                            try
-                            {
-                                Console.Write("Номер месяца: ");
-                                month = Convert.ToInt32(Console.ReadLine());
-                                Console.Write("Номер дня: ");
-                                day = Convert.ToInt32(Console.ReadLine());
-                                DateCoder(month, day);
-                            }
-                            catch 
-                            {
-                                Console.WriteLine("Недопустимое значение");
-                            }
-                        } //Дата -> Знаки
-                        break; 
-                    case "2":
+                    case "change":
+                        ChangeMod();
                         break;
-                    case "3":
+                    case "code":
+                        CodeMod();
+                        mod = "change";
+                        break;
+                    case "decode":
+                        ChangeMod();
                         return;
-                    default:
-                        Console.WriteLine("Команда не распознана");
-                        break;
                 }
-                    
-                Console.WriteLine();
-                Console.WriteLine();
             }
         }
 
@@ -138,7 +148,7 @@ namespace CardCodedDate
         }
 
 
-        static void DateCoder(int month,int day)
+        static void DateCoder(int month, int day)
         {
             if (month < 1 || month > 12)
             {
@@ -173,7 +183,7 @@ namespace CardCodedDate
                 }
             }
             if (AnswZ == -1) { AnswZ = 11; }
-            
+
             Console.Write("Это: " + ZStr[AnswZ]);
 
             int numOfDay = 0;
@@ -196,13 +206,13 @@ namespace CardCodedDate
 
             AnswM = numOfDay / ((ZHowLong[AnswZ] / 4) + 1);
             AnswC = numOfDay % ((ZHowLong[AnswZ] / 4) + 1);
-            if (AnswC==0)
+            if (AnswC == 0)
             {
                 AnswM--;
                 AnswC = ((numOfDay - 1) % ((ZHowLong[AnswZ] / 4) + 1)) + 1;
             }
-            Console.Write(" "+ MChar[AnswM]);
-            Console.Write(" " + CChar[AnswC-1]);
+            Console.Write(" " + MChar[AnswM]);
+            Console.Write(" " + CChar[AnswC - 1]);
             Console.WriteLine();
 
             /*
