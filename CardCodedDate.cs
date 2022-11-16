@@ -13,13 +13,78 @@ namespace CardCodedDate
         static int[] ZHowLong = new int[] { 29, 30, 30, 31, 31, 31, 31, 30, 33, 30, 30, 30 };
         static int[] MaxDayInMounth = new int[] { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
+        
+        static string mod = "change";
+
         static void Main(string[] args)
         {
             Inic();
-            Console.WriteLine(DateCoder(12,3));
-            Console.WriteLine(DateCoder(4,2));
-            Console.WriteLine(DateCoder(5,3));
-            Console.WriteLine(DateCoder(4312,4231));
+            while (mod != "exit")
+            {
+                switch (mod)
+                {
+                    case "change":
+                        ChangeMod();
+                        break;
+                    case "code":
+                        CodeMod();
+                        mod = "change";
+                        break;
+                    case "decode":
+                        Console.WriteLine("Функционал отсутствует");
+                        ChangeMod();
+                        break;
+                }
+            }
+        }
+
+        static void ChangeMod()
+        {
+            Console.Write(
+                "----------------------------------\n" +
+                "Введите номер желаемого действия\n\n" +
+                "№ | Обозначение\n" +
+                "1 | Кодирование даты\n" +
+                "2 | Расшифровка кода\n" +
+                "3 | Выйти\n\n" +
+                "Ввод: "
+                );
+            string a = Console.ReadLine();
+            Console.WriteLine("----------------------------------");
+
+            switch (a)
+            {
+                case "1":
+                    mod = "code";
+                    break;
+                case "2":
+                    mod = "decode";
+                    break;
+                case "3":
+                    mod = "exit";
+                    break;
+                default:
+                    Console.WriteLine("Команда не распознана");
+                    break;
+            }
+        }
+
+
+        static void CodeMod()
+        {
+            int month = 0;
+            int day = 0;
+
+            Console.Write("Номер месяца: ");
+            month = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Номер дня: ");
+            day = Convert.ToInt32(Console.ReadLine());
+            string answer = DateCoder(month, day);
+            if (answer == "-1")
+            {
+                return;
+            }
+            Console.WriteLine(answer);
         }
 
         static string DateCoder(int month, int day)
