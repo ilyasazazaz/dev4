@@ -18,6 +18,28 @@ namespace CardCodedDate
 
         static string mod = "change";
 
+        static void Main(string[] args)
+        {
+            Inic();
+            while (mod != "exit")
+            {
+                switch (mod)
+                {
+                    case "change":
+                        ChangeMod();
+                        break;
+                    case "code":
+                        CodeMod();
+                        mod = "change";
+                        break;
+                    case "decode":
+                        Console.WriteLine("Функционал отсутствует");
+                        ChangeMod();
+                        break;
+                }
+            }
+        }
+
         static void ChangeMod()
         {
             Console.Write(
@@ -53,39 +75,87 @@ namespace CardCodedDate
         {
             int month = 0;
             int day = 0;
-            try
+
+            Console.Write("Номер месяца: ");
+            month = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Номер дня: ");
+            day = Convert.ToInt32(Console.ReadLine());
+            string answer = DateCoder(month, day);
+            if (answer == "-1")
             {
-                Console.Write("Номер месяца: ");
-                month = Convert.ToInt32(Console.ReadLine());
-                Console.Write("Номер дня: ");
-                day = Convert.ToInt32(Console.ReadLine());
-                DateCoder(month, day);
+                return;
             }
-            catch
-            {
-                Console.WriteLine("Недопустимое значение");
-            }
+            Console.WriteLine(answer);
         }
 
-        static void Main(string[] args)
+        static string DateCoder(int month, int day)
         {
-            Inic();
-            while (mod!= "exit")
+            string answer = "Это: ";
+
+            if (month < 1 || month > 12)
             {
-                switch (mod)
+                Console.WriteLine("Недопустимое значение");
+                return "-1";
+            }
+            if (day < 1 || day > MaxDayInMounth[month - 1])
+            {
+                Console.WriteLine("Недопустимое значение");
+                return "-1";
+            }
+            
+            int AnswZ = 0;
+            int AnswM = 0;
+            int AnswC = 0;
+
+            for (int q = 0; q < 13; q++)
+            {
+                if (zodiac[q, 0] == month)
                 {
-                    case "change":
-                        ChangeMod();
-                        break;
-                    case "code":
-                        CodeMod();
-                        mod = "change";
-                        break;
-                    case "decode":
-                        ChangeMod();
-                        return;
+                    if (zodiac[q, 1] <= day)
+                    {
+                        AnswZ = q;
+                        q = 13;
+                    }
+                    else
+                    {
+                        AnswZ = q - 1;
+                        q = 13;
+                    }
                 }
             }
+            if (AnswZ == -1) { AnswZ = 11; }
+
+            answer+=ZStr[AnswZ];
+
+            int numOfDay = 0;
+            if (day >= zodiac[AnswZ, 1] && month == zodiac[AnswZ, 0])
+            {
+                numOfDay = day - zodiac[AnswZ, 1] + 1;
+            }
+            else
+            {
+                if (month == 1)
+                {
+                    numOfDay = MaxDayInMounth[11] - zodiac[AnswZ, 1] + day + 1;
+
+                }
+                else
+                {
+                    numOfDay = MaxDayInMounth[month - 2] - zodiac[AnswZ, 1] + day + 1;
+                }
+            }
+
+            AnswM = numOfDay / ((ZHowLong[AnswZ] / 4) + 1);
+            AnswC = numOfDay % ((ZHowLong[AnswZ] / 4) + 1);
+            if (AnswC == 0)
+            {
+                AnswM--;
+                AnswC = ((numOfDay - 1) % ((ZHowLong[AnswZ] / 4) + 1)) + 1;
+            }
+            answer+=" " + MChar[AnswM];
+            answer += " " + CChar[AnswC - 1];
+
+            return answer;
         }
 
         static void Inic()
@@ -145,88 +215,6 @@ namespace CardCodedDate
                 }
             }
             //Console.WriteLine("Весы стартуют: " + zodiac[9, 1] + "." + zodiac[9, 0]);
-        }
-
-
-        static void DateCoder(int month, int day)
-        {
-            if (month < 1 || month > 12)
-            {
-                Console.WriteLine("Недопустимое значение");
-                return;
-            }
-            if (day < 1 || day > MaxDayInMounth[month - 1])
-            {
-                Console.WriteLine("Недопустимое значение");
-                return;
-            }
-
-
-            int AnswZ = 0;
-            int AnswM = 0;
-            int AnswC = 0;
-
-            for (int q = 0; q < 13; q++)
-            {
-                if (zodiac[q, 0] == month)
-                {
-                    if (zodiac[q, 1] <= day)
-                    {
-                        AnswZ = q;
-                        q = 13;
-                    }
-                    else
-                    {
-                        AnswZ = q - 1;
-                        q = 13;
-                    }
-                }
-            }
-            if (AnswZ == -1) { AnswZ = 11; }
-
-            Console.Write("Это: " + ZStr[AnswZ]);
-
-            int numOfDay = 0;
-            if (day >= zodiac[AnswZ, 1] && month == zodiac[AnswZ, 0])
-            {
-                numOfDay = day - zodiac[AnswZ, 1] + 1;
-            }
-            else
-            {
-                if (month == 1)
-                {
-                    numOfDay = MaxDayInMounth[11] - zodiac[AnswZ, 1] + day + 1;
-
-                }
-                else
-                {
-                    numOfDay = MaxDayInMounth[month - 2] - zodiac[AnswZ, 1] + day + 1;
-                }
-            }
-
-            AnswM = numOfDay / ((ZHowLong[AnswZ] / 4) + 1);
-            AnswC = numOfDay % ((ZHowLong[AnswZ] / 4) + 1);
-            if (AnswC == 0)
-            {
-                AnswM--;
-                AnswC = ((numOfDay - 1) % ((ZHowLong[AnswZ] / 4) + 1)) + 1;
-            }
-            Console.Write(" " + MChar[AnswM]);
-            Console.Write(" " + CChar[AnswC - 1]);
-            Console.WriteLine();
-
-            /*
-            Console.WriteLine("Сегодня " + numOfDay + " День");
-            Console.WriteLine("В этот месяц " + MaxDayInMounth[month-1] + " дней");
-            Console.WriteLine("В этом знаке " + ZHowLong[AnswZ] + " дней");
-            Console.WriteLine("Сегодня " + month + " месяц");
-            */
-        }
-
-
-        static void YearTest()
-        {
-
         }
     }
 }
