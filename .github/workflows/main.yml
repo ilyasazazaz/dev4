@@ -1,0 +1,13 @@
+name: CI
+
+on: [watch]
+
+jobs:
+  code:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: code
+      run : echo "HAHAHA"
+    
+  
