@@ -1,0 +1,9 @@
+- name: Demo Issue Action 🛰
+  # You may pin to the exact commit or the version.
+  # uses: ankur12-1610/demo-action@c538c3135cd2a38c3e2f7e8f73c649b33c4f1322
+  uses: ankur12-1610/demo-action@v1.0
+  with:
+    # The Github access token.
+    GITHUB_TOKEN: 
+    # The comment to be added to the issue.
+    ISSUE_COMMENT: da
