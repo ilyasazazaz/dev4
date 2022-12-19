@@ -7,20 +7,12 @@ namespace CardCodedDate
         /// Короче, год делиться на знаки зодиака, они делятся на 4 масти по 8-9 карт от 6 до хз
         /// ♑♒♓♈♉♊♋♌♍♎♏♐ ♠♥♣♦ 678910JQKA
         /// Надо сделать конвертор из даты в шифр, и обратно
-        static string[] ZStr = new string[] { "Козерог", "Водолей", "Рыбы", "Овен", "Телец", "Близнецы", "Рак", "Лев", "Дева", "Весы", "Скорпион", "Стрелец" };
-        static char[] MChar = new char[] { '♥', '♠', '♦', '♣' };
-        static string[] CChar = new string[] { "6", "7", "8", "9", "10", "J", "Q", "K", "A" };
-
-        static int[,] zodiac = new int[12, 2]; // 12 зодиаков, месяц и дата начала. Например [0,0]=12; [0,1]=22
-
-        static int[] ZHowLong = new int[] { 29, 30, 30, 31, 31, 31, 31, 30, 33, 30, 30, 30 };
-        static int[] MaxDayInMounth = new int[] { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-
+        
         static string mod = "change";
 
         static void Main(string[] args)
         {
-            Inic();
+            DateCalc.Inic();
             while (mod != "exit")
             {
                 switch (mod)
@@ -80,7 +72,7 @@ namespace CardCodedDate
             month = Convert.ToInt32(Console.ReadLine());
             Console.Write("Номер дня: ");
             day = Convert.ToInt32(Console.ReadLine());
-            string answer = DateCoder(month, day);
+            string answer = DateCalc.DateCoder(month, day);
             if (answer == "-1")
             {
                 return;
@@ -88,7 +80,21 @@ namespace CardCodedDate
             Console.WriteLine(answer);
         }
 
-        static string DateCoder(int month, int day)
+        
+    }
+
+    public class DateCalc
+    {
+        static string[] ZStr = new string[] { "Козерог", "Водолей", "Рыбы", "Овен", "Телец", "Близнецы", "Рак", "Лев", "Дева", "Весы", "Скорпион", "Стрелец" };
+        static char[] MChar = new char[] { '♥', '♠', '♦', '♣' };
+        static string[] CChar = new string[] { "6", "7", "8", "9", "10", "J", "Q", "K", "A" };
+
+        static int[,] zodiac = new int[12, 2]; // 12 зодиаков, месяц и дата начала. Например [0,0]=12; [0,1]=22
+
+        static int[] ZHowLong = new int[] { 29, 30, 30, 31, 31, 31, 31, 30, 33, 30, 30, 30 };
+        static int[] MaxDayInMounth = new int[] { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+        public static string DateCoder(int month, int day)
         {
             string answer = "Это: ";
 
@@ -102,7 +108,7 @@ namespace CardCodedDate
                 Console.WriteLine("Недопустимое значение");
                 return "-1";
             }
-            
+
             int AnswZ = 0;
             int AnswM = 0;
             int AnswC = 0;
@@ -125,7 +131,7 @@ namespace CardCodedDate
             }
             if (AnswZ == -1) { AnswZ = 11; }
 
-            answer+=ZStr[AnswZ];
+            answer += ZStr[AnswZ];
 
             int numOfDay = 0;
             if (day >= zodiac[AnswZ, 1] && month == zodiac[AnswZ, 0])
@@ -152,13 +158,13 @@ namespace CardCodedDate
                 AnswM--;
                 AnswC = ((numOfDay - 1) % ((ZHowLong[AnswZ] / 4) + 1)) + 1;
             }
-            answer+=" " + MChar[AnswM];
+            answer += " " + MChar[AnswM];
             answer += " " + CChar[AnswC - 1];
 
             return answer;
         }
 
-        static void Inic()
+        public static void Inic()
         {
             for (int q = 0; q < 13; q++)
             {
@@ -217,4 +223,5 @@ namespace CardCodedDate
             //Console.WriteLine("Весы стартуют: " + zodiac[9, 1] + "." + zodiac[9, 0]);
         }
     }
+
 }
